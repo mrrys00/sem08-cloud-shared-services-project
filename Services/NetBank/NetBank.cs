@@ -41,7 +41,7 @@ internal class NetBank
         {
             WriteLineColored("""
             Invalid arguments!
-            Expected port and at least one url: <port> <url 1> <url 2>
+            Expected port and optional url: <port> <url 1> <url 2>
             Url must be valid and absolute eg: <scheme>://<authority>
             """, ConsoleColor.Red);
             return;
@@ -65,7 +65,7 @@ internal class NetBank
     {
         urls = args.Skip(1).ToArray();
 
-        if (args.Length > 1 &&
+        if (args.Length > 0 &&
             urls.All(url => Uri.TryCreate(url, UriKind.Absolute, out _)))
             return int.TryParse(args[0], out port);
 

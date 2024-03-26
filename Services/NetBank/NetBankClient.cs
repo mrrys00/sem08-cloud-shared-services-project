@@ -8,6 +8,9 @@ internal static class NetBankClient
     internal static async Task StartClient(
         string[] urls, CancellationToken token)
     {
+        if (!urls.Any())
+            return;
+
         using var client = new HttpClient();
 
         NetBank.WriteLineColored(
