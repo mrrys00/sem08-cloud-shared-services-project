@@ -1,0 +1,5 @@
+asyncio
+fastapi
+requests
+starlette
+uvicorn
