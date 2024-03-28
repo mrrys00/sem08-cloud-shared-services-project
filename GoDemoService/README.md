@@ -6,10 +6,22 @@
 docker compose up
 ```
 
+or more brutal solution:
+
+```shell
+docker compose up --force-recreate --remove-orphans --detach
+```
+
+stop:
+
+```shell
+docker compose down
+```
+
 ## How to test?
 
 1. After running the docker compose 
-2. Go to http://localhost:16686/.
+2. Go to http://localhost:16686/. There will be no traces for _godemoservice_ so it won't be available in the dropdown.
 3. Select _godemoservice_ with the Service dropdown.
 4. Send cURL (eg. using Postman or terminal): 
     ```
@@ -39,9 +51,10 @@ DEFAULT_URL= `localhost:8081`
 
 ## TO DO list
 
-1. Integration with Mateusz's service
+1. Integration with Mateusz's service with routine
 2. More logging
 3. Move services configs to the docker compose envs
 4. Upgrade documentation
 5. Add some random delay for response
 6. Move to _Services_ dir before merge
+7. Add Grafana integration

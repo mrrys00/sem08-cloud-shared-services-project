@@ -12,7 +12,8 @@ func main() {
 	r := gin.Default()
 
 	// Routes
-	r.GET(config.RouteSecurityAlert, apis.HandleSecurityAlert)
+	r.GET(config.RouteHello, apis.HandleHello)
+	r.GET(config.RouteAlert, apis.HandleAlert)
 
 	// Run server
 	if err := r.Run(config.DefaultPort); err != nil {
