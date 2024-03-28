@@ -42,3 +42,20 @@ A metric is a measurement of a service captured at runtime. The moment of captur
 #### Logs
 
 A log is a timestamped text record, either structured (recommended) or unstructured, with metadata. Of all telemetry signals, logs have the biggest legacy. Most programming languages have built-in logging capabilities or well-known, widely used logging libraries. Although logs are an independent data source, they may also be attached to spans. In OpenTelemetry, any data that is not part of a distributed trace or a metric is a log. For example, events are a specific type of log. Logs often contain detailed debugging/diagnostic info, such as inputs to an operation, the result of the operation, and any supporting metadata for that operation.
+
+## 3. Case study concept description
+
+The performed case study will focus on the demonstration of network traffic and performance measurement and tracking provided by OpenTelemetry framework and its observability backends, like Jaeger. In this simple example, we will use OpenTelemetry to observe the internal state of the system consisting of a couple of services that will generate traffic within a system by sending some HTTP requests and sharing dummy resources to fetch.
+
+System will be configured to communicate with the observability backends like Jaeger, Prometheus and Grafana. User will be able to access those tools to analyze and monitor data flow within the application and for example find potential problems within the system's performance. 
+
+## 4. Solution architecture 
+
+A system made for the purpose of this case study consists of:
+
+* 3 services continuously sending and fetching data from each other to simulate a traffic within a system:
+    - 1 Go service
+    - 1 C# service
+    - 1 Python/Java service
+* Services will be instantiated and configured as Docker containers within a Docker Compose setup to be able to communicate with each other
+* Docker Compose will also be responsible for connecting generated metrics with observability backends, to display them in the user-friendly form.
