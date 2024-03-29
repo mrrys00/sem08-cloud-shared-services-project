@@ -15,12 +15,14 @@ RUN apt-get update && apt-get install -y \
     python3-pip \
     && rm -rf /var/lib/apt/lists/*
 
-# Install any needed packages specified in py_deps.txt
-RUN pip3 install --no-cache-dir -r requirements.txt.txt
-
 # Copy PyBank
-COPY PyBankService/ /services/py_bank/
+COPY ./ /services/py_bank/
 
-# Run PyBankClient
-CMD ["python3", "PyBankService.py", "url1", "url2"]
-# specify urls ! ! !
+# Install any needed packages specified in py_deps.txt
+RUN pip3 install --no-cache-dir -r /services/py_bank/requirements.txt
+
+# Expose port 8080
+EXPOSE 8080
+
+# Run PyBankClient on port 8080
+CMD ["python3", "/services/py_bank/PyBankService.py", "8080"]

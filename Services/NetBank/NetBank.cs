@@ -2,75 +2,42 @@
 
 internal class NetBank
 {
-    private static readonly Random Rand = new();
-
-    internal static bool RandBool()
-    {
-        return Rand.Next(2) is 1;
-    }
-
-    internal static double RandomDouble()
-    {
-        return Math.Round(Rand.Next(-100_000, 100_000) + Rand.NextDouble(), 2);
-    }
-
-    internal static async Task RandDelay(CancellationToken token)
-    {
-        try
-        {
-            await Task.Delay(Rand.Next(
-                NetBankConfig.MinDelay, NetBankConfig.MaxDelay), token);
-        }
-        catch
-        {
-            WriteLineColored("Stopping task . . .", ConsoleColor.Yellow);
-        }
-    }
-
-    internal static void WriteLineColored(
-        in string message, in ConsoleColor color)
-    {
-        Console.ForegroundColor = color;
-        Console.WriteLine(message);
-        Console.ForegroundColor = ConsoleColor.White;
-    }
-
     internal static async Task Main(string[] args)
     {
-        if (!Validate(args, out var port, out var urls))
+        if (!Validate(args, out var port, out var telemetryPort, out var urls))
         {
-            WriteLineColored("""
+            Helper.WriteLineColored("""
             Invalid arguments!
-            Expected port and optional url: <port> <url 1> <url 2>
-            Url must be valid and absolute eg: <scheme>://<authority>
+            Expected port, telemetry port and optional urls:
+                <port> <telemetry port> <url 1> <url 2>
+            Url must be valid and absolute eg:
+                <scheme>://<authority>
             """, ConsoleColor.Red);
             return;
         }
 
-        using var cancellationToken = new CancellationTokenSource();
+        var listener = Service.StartListener(port, telemetryPort);
+        var client = Client.StartClient(urls);
 
-        var listener = NetBankListener.StartListener(port, cancellationToken.Token);
-        var client = NetBankClient.StartClient(urls, cancellationToken.Token);
-
-        Console.WriteLine("Press any key to stop the service . . .");
-        Console.ReadKey();
-        Console.WriteLine();
-        cancellationToken.Cancel();
+        Console.WriteLine("Press CTRL+C to quit . . .");
 
         await Task.WhenAll(listener, client);
     }
 
     private static bool Validate(
-        in string[] args, out int port, out string[] urls)
+        in string[] args,
+        out int port, out int telemetryPort, out string[] urls)
     {
-        urls = args.Skip(1).ToArray();
-
-        if (args.Length > 0 &&
-            urls.All(url => Uri.TryCreate(url, UriKind.Absolute, out _)))
-            return int.TryParse(args[0], out port);
-
+        urls = args.Skip(2).ToArray();
         port = default;
-        return false;
+        telemetryPort = default;
+
+        if (args.Length < 2)
+            return false;
+        if (!urls.All(url => Uri.TryCreate(url, UriKind.Absolute, out _)))
+            return false;
+        return int.TryParse(args[0], out port)
+               && int.TryParse(args[1], out telemetryPort);
     }
 
 }
