@@ -18,6 +18,11 @@ stop:
 docker compose down
 ```
 
+get rid of odl image:
+```shell
+docker rmi $(docker images 'godemoservice-godemoserv' -a -q)
+```
+
 ## How to test?
 
 1. After running the docker compose 
@@ -37,24 +42,31 @@ docker compose down
 
 ## Documentation
 
-DEFAULT_URL= `localhost:8081`
+DEFAULT_URL= `localhost:8083`
 
 **ENDPOINTS:**
 
-1. _/securityalert_
+1. _/hello_
     * request:
       * params:
         * name (optional): string (eg. Ala)
     * response:
       * json:
         * message (required): string (eg. Hello, Ala!) 
+2. _/alert_
+    * request:
+        * params:
+            * message (optional): string (eg. Ala)
+    * response:
+        * json:
+            * message (required): string (eg. Ala)
 
 ## TO DO list
 
 1. Integration with Mateusz's service with routine
 2. More logging
-3. Move services configs to the docker compose envs
-4. Upgrade documentation
-5. Add some random delay for response
+3. [DONE] Move services configs to the docker compose envs
+4. [DONE] Upgrade documentation
+5. [DONE] Add some random delay for response
 6. Move to _Services_ dir before merge
 7. Add Grafana integration

@@ -9,17 +9,21 @@ const (
 	serviceDefaultPort    = `8081`
 	constOutboundHostPort = "OUTBOUND_HOST_PORT"
 	outboundHostPort      = "localhost:8080"
+	constOutboundHostEndp = "OUTBOUND_GET_ENDP"
+	outboundHostEndp      = "balance"
 
-	RouteHello = "hello"
-	SpanHello  = RouteHello
-	RouteAlert = "alert"
-	SpanAlert  = RouteAlert
+	RouteHello           = "hello"
+	SpanHello            = RouteHello
+	RouteAlert           = "alert"
+	SpanAlert            = RouteAlert
+	SpanOutboundHostEndp = outboundHostEndp
 )
 
 var (
 	ServiceName      = setServiceName()
 	DefaultPort      = setServicePort()
 	OutboundHostPort = setOutboundHostPort()
+	OutboundHostEndp = setOutboundHostEndp()
 )
 
 func setServiceName() string {
@@ -46,5 +50,14 @@ func setOutboundHostPort() string {
 		val = outboundHostPort
 	}
 
+	return val
+}
+
+func setOutboundHostEndp() string {
+	val, present := os.LookupEnv(constOutboundHostEndp)
+	if !present {
+		val = outboundHostEndp
+	}
+	val = "/" + val
 	return val
 }

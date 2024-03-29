@@ -1,4 +1,4 @@
-ARG port=8081
+#ARG port=8081
 ARG app=cmd/service
 
 FROM golang as builder
@@ -19,8 +19,8 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /out/${app} ./${app}
 # final stage
 FROM scratch
 ARG app
-ARG port
+#ARG port
 COPY --from=builder /out/${app} /app/
 
-EXPOSE ${port}
+#EXPOSE ${port}
 ENTRYPOINT ["/app/service"]

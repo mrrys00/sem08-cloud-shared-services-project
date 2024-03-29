@@ -4,57 +4,56 @@ import (
 	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/mrrys00/sem08-cloud-shared-services-project/pkg/config"
 	"github.com/mrrys00/sem08-cloud-shared-services-project/pkg/utils"
 	"go.opentelemetry.io/otel/propagation"
-	//"go.opentelemetry.io/otel"
-	"github.com/mrrys00/sem08-cloud-shared-services-project/lib/tracing"
-	"github.com/mrrys00/sem08-cloud-shared-services-project/pkg/config"
+	"go.opentelemetry.io/otel/trace"
 	"net/http"
 )
 
-func HandleHello(c *gin.Context) {
-	ctx := context.Background()
-	tracer := tracing.Init(ctx, config.ServiceName)
+func HelloMiddleware(ctx context.Context, tracer trace.Tracer) gin.HandlerFunc {
+	handleHello := func(c *gin.Context) {
+		_, span := tracer.Start(c.Request.Context(), config.SpanHello)
+		defer span.End()
 
-	//outboundHostPort, err := os.LookupEnv("OUTBOUND_HOST_PORT")
-	//if err {
-	//	outboundHostPort = "localhost:8082"
-	//}
+		propagator := propagation.TraceContext{}
 
-	//tracer := otel.Tracer("example-tracer")
+		propagator.Inject(ctx, propagation.HeaderCarrier(c.Request.Header))
 
-	_, span := tracer.Start(c.Request.Context(), config.SpanHello)
-	defer span.End()
+		utils.RandomSleep()
 
-	propagator := propagation.TraceContext{}
+		name := c.DefaultQuery("name", "World")
+		span.AddEvent("Saying hello to " + name)
 
-	propagator.Inject(ctx, propagation.HeaderCarrier(c.Request.Header))
-	//if _, err = writer.Write([]byte(fmt.Sprintf("%s -> %s", thisServiceName, response))); err != nil {
-	//	log.Fatalf("Error occurred on write: %s", err)
-	//}
+		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Hello, %s!", name)})
+	}
 
-	utils.RandomSleep()
-
-	name := c.DefaultQuery("name", "World")
-	span.AddEvent("Saying hello to " + name)
-
-	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Hello, %s!", name)})
+	return gin.HandlerFunc(handleHello)
 }
 
-func HandleAlert(c *gin.Context) {
-	ctx := context.Background()
-	tracer := tracing.Init(ctx, config.ServiceName)
+func AlertMiddleware(ctx context.Context, tracer trace.Tracer) gin.HandlerFunc {
+	handleAlert := func(c *gin.Context) {
+		_, span := tracer.Start(c.Request.Context(), config.SpanAlert)
+		defer span.End()
 
-	_, span := tracer.Start(c.Request.Context(), config.SpanAlert)
-	defer span.End()
+		propagator := propagation.TraceContext{}
+		propagator.Inject(ctx, propagation.HeaderCarrier(c.Request.Header))
 
-	propagator := propagation.TraceContext{}
-	propagator.Inject(ctx, propagation.HeaderCarrier(c.Request.Header))
+		utils.RandomSleep()
 
-	utils.RandomSleep()
+		alertMessage := c.DefaultQuery("message", "Not specified message")
+		span.AddEvent("Alert " + alertMessage)
 
-	alertMessage := c.DefaultQuery("message", "Not specified message")
-	span.AddEvent("Alert " + alertMessage)
+		// TO DO - ping Mateusz's service
+		//resp, err := ping.Ping(ctx, tracer, config.OutboundHostPort, config.OutboundHostEndp)
+		//if err != nil {
+		//	log.Fatalf("%s\n", err)
+		//} else {
+		//	log.Printf("%s\n", resp)
+		//}
 
-	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("%s", alertMessage)})
+		c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("%s", alertMessage)})
+	}
+
+	return gin.HandlerFunc(handleAlert)
 }
