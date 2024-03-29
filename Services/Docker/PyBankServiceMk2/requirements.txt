@@ -1,3 +1,2 @@
 asyncio
-flask
 flask[async]
