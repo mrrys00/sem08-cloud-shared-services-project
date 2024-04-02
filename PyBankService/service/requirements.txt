@@ -1,0 +1,6 @@
+asyncio
+fastapi
+requests
+starlette
+uvicorn
+flask

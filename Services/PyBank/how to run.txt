@@ -1,9 +1,0 @@
-# run flask service (mk2)
-
-python3 -m flask --app /services/py_bank/app.py run -p 8080
-
-# run locust mocking client on port 8090
-# this will start a ui locust service at: http://localhost:8090/
-# the host to mock is (likely): http://localhost:8080
-
-python3 -m locust -P 8090
