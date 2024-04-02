@@ -53,9 +53,24 @@ System will be configured to communicate with the observability backends like Ja
 
 A system made for the purpose of this case study consists of:
 
-* 3 services continuously sending and fetching data from each other to simulate a traffic within a system:
-    - 1 Go service
-    - 1 C# service
-    - 1 Python/Java service
+* 2 services continuously sending and fetching data from each other to simulate a traffic within a system:
+    - Go service (`GoDemoService`)
+  
+      Endpoints:
+    1. _/hello_
+        * request:
+            * params:
+                * name (optional): string (eg. Ala)
+        * response:
+            * json:
+                * message (required): string (eg. Hello, Ala!) 
+    2. _/alert_
+        * request:
+            * params:
+                * message (optional): string (eg. Ala)
+        * response:
+            * json:
+                * message (required): string (eg. Ala)
+    - Python service (`PyBank`)
 * Services will be instantiated and configured as Docker containers within a Docker Compose setup to be able to communicate with each other
 * Docker Compose will also be responsible for connecting generated metrics with observability backends, to display them in the user-friendly form.
