@@ -1,3 +1,0 @@
-python3 service/PyBankService.py 8080
-
-python3 -m locust -P 8089
