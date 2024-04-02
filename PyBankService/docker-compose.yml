@@ -8,11 +8,9 @@ services:
     ports:
       - "8080:8080"
     environment:
-      - SERVICE_NAME=pybankservice
+      - SERVICE_NAME=pybankserv
       - SERVICE_PORT=8080
-    networks:
-      vpcbr:
-        # ipv4_address: 10.5.0.6
+
 
   locust:
     image: locustio/locust
@@ -21,18 +19,5 @@ services:
       - "8089:8089"
     volumes:
       - ./:/locust-tasks
-    networks:
-      vpcbr:
-        # ipv4_address: 10.5.0.5
     depends_on:
       - pybankserv
-
-# https://stackoverflow.com/questions/39493490/provide-static-ip-to-docker-containers-via-docker-compose
-# https://stackoverflow.com/questions/48379107/how-can-i-ping-other-containers-in-a-docker-network-through-their-hostname
-networks:
-  vpcbr:
-    driver: bridge
-    # ipam:
-    #  config:
-    #    - subnet: 10.5.0.0/16
-    #      gateway: 10.5.0.1

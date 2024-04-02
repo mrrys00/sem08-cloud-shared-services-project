@@ -1,10 +1,9 @@
 FROM python:3.12-slim
 
-ARG app=/app
-WORKDIR ${app}
+WORKDIR /app
 
-COPY . ${app}
+COPY ./service/ .
 
 RUN pip install fastapi uvicorn
-# CMD ["sleep", "2137"]
-CMD ["python3", "service/PyBankService.py", "8080"]
+
+CMD ["uvicorn", "PyBankService:app", "--host", "0.0.0.0", "--port", "8080"]
