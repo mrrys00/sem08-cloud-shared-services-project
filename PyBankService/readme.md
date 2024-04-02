@@ -1,57 +1,65 @@
-# PyBankServices and PyBankClients
+# Simple Py Demo Service
 
-## How to run PyBankService?
-
-### Service Mk1
+## How to run?
 
 ```shell
-python3 service/PyBankService.py 8080
+docker compose up
 ```
-Will start the bank service on port `8080`
-at [http//:localhost:8080](http//:localhost:8080)
 
-### Service Mk2
+or more brutal solution:
 
 ```shell
-python3 -m flask --app /services/py_bank/app.py run -p 8080
+docker compose up --force-recreate --remove-orphans --detach
 ```
-Will start the `Flask` bank service on port `8080`
-at [http//:localhost:8080](http//:localhost:8080)
 
-## How to run PyBankClient?
-
-### Client Mk1
-```shell
-python3 /services/py_bank/PyBankClient.py <url1> <url2>
-```
-Will start client that will send requests with random delay to urls
-
-### Client Mk2 - Locust mocking client
+stop:
 
 ```shell
-python3 -m locust -P 8089
+docker compose down
 ```
-Will start locust mocking client as described in file `locustfile.py`
-as a web interface avaliable
-at [http//:localhost:8089](http//:localhost:8089)
 
+get rid of odl image:
+```shell
+docker rmi $(docker images 'godemoservice-godemoserv' -a -q)
+```
+
+## How to test?
+
+1. After running the docker compose 
+2. Go to Locust Web UI at [localhost:8089](http://localhost:8089/). 
+3. Input
+    * Users - peak number of concurrent Locust users.
+    * Spawn-rate - rate to spawn users at (users per second).
+    * Mocking target (Py Service at [http://localhost:8080](http://localhost:8080))
+4. Press `Start`. Locust will now mock service and agregate statistics
 
 ## Documentation
 
-[Locust configuration options](https://docs.locust.io/en/stable/configuration.html)
+* DEFAULT_URL= [http://localhost:8080](http://localhost:8080)
 
-**Endpoints:**
+* [Locust configuration](https://docs.locust.io/en/stable/configuration.html)
+
+### Endpoints
 
 1. `/transaction`
     * request:
       * params: optional and ignored
     * response:
-      * json: { execution : `<bool>` }
-      > // if transaction was succesful
+        ```json
+        { "execution" : true } // if transaction was succesful
+        ```
+    * curl:
+        ```ps1
+        curl --location 'http://pybankserv:8080/transaction'
+        ```
 2. `/balance`
     * request:
       * params: optional and ignored
     * response:
-      * json: { balance : `<double>` }
-      > // balance value
-
+        ```json
+        { "balance" : 123.45 } // balance value
+        ```
+    * curl:
+        ```ps1
+        curl --location 'http://pybankserv:8080/balance'
+        ```
