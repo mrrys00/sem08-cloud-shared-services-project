@@ -197,3 +197,4 @@ DEFAULT_URL= `localhost:8083`
 ## 7. TODO list
 
 1. Add Grafana integration
+* Grafana configuration for docker containers: https://grafana.com/blog/2023/06/07/easily-monitor-docker-desktop-containers-with-grafana-cloud/
