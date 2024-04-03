@@ -4,6 +4,7 @@ WORKDIR /app
 
 COPY ./service/ .
 
-RUN pip install fastapi uvicorn
+RUN pip install -r requirements.txt
+RUN opentelemetry-bootstrap -a install
 
-CMD ["uvicorn", "PyBankService:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["opentelemetry-instrument", "--traces_exporter", "console", "--metrics_exporter", "console", "--logs_exporter", "console", "--service_name", "pybankserv", "flask", "run", "-p", "8080", "--host", "0.0.0.0"]
