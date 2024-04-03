@@ -75,9 +75,9 @@ A system made for the purpose of this case study consists of:
 * Services will be instantiated and configured as Docker containers within a Docker Compose setup to be able to communicate with each other
 * Docker Compose will also be responsible for connecting generated metrics with observability backends, to display them in the user-friendly form.
 
-# Simple Py Demo Service
+## 5. Demo
 
-## How to run?
+### How to run?
 
 
 ```shell
@@ -101,7 +101,7 @@ get rid of odl image:
 docker rmi $(docker images 'sem08-cloud-shared-services-project' -a -q)
 ```
 
-## How to test Go service?
+### How to test Go service?
 
 1. After running the docker compose
 2. Go to http://localhost:16686/. There will be no traces for _godemoservice,_ so it won't be available in the dropdown.
@@ -126,7 +126,7 @@ docker rmi $(docker images 'sem08-cloud-shared-services-project' -a -q)
    ```
 6. Should see the logs in the Jaeger UI
 
-## How to test Python service?
+### How to test Python service?
 
 1. After running the docker compose
 2. Go to Locust Web UI at [localhost:8089](http://localhost:8089/).
@@ -137,7 +137,7 @@ docker rmi $(docker images 'sem08-cloud-shared-services-project' -a -q)
 4. Press `Start`. Locust will now mock service and agregate statistics
 5. Verify that the opentelemetry logging is visible in the console
 
-## Documentation
+## 6. Documentation
 
 ### Go Service
 
@@ -194,6 +194,6 @@ DEFAULT_URL= `localhost:8083`
         ```
 
     
-## TO DO list
+## 7. TODO list
 
 1. Add Grafana integration
