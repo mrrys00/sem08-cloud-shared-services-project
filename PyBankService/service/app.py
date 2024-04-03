@@ -15,17 +15,21 @@ basicConfig(level=INFO)
 logger = getLogger(__name__)
 
 tracer = trace.get_tracer('pybankserv.tracer')
-meter = metrics.get_meter('pybankserv.meter')
-# meter2 = metrics.get_meter('pybankserv.meter')
 
-pybankserv_counter = meter.create_counter(
-    'pybankserv.pybankserv_counter',
+meter_failed_transactions = metrics.get_meter(
+    'pybankserv.meter_failed_transactions')
+meter_debt_balances = metrics.get_meter(
+    'pybankserv.meter_debt_balances')
+
+failed_transactions_counter = meter_failed_transactions.create_counter(
+    'pybankserv.counter_failed_transactions',
     description='Number of failed transactions',
 )
-# balances_with_debt_counter = meter2.create_counter(
-#     'pybankserv.debt_balance',
-#     description='Number of balance requests from accounts with debt',
-# )
+debt_balances_counter = meter_debt_balances.create_counter(
+    'pybankserv.counter_debt_balances',
+    description='Number or balance requests from accounts with debt',
+)
+
 
 
 @app.route(TRANSACTION)
@@ -71,8 +75,8 @@ def trace_request(req_type, increm):
         tr.set_attribute('pybankserv.date', str(datetime.now()))
 
         if req_type is TRANSACTION and increm:
-            pybankserv_counter.add(
-                1, {'pybankserv.pybankserv_counter', str(False)})
+            failed_transactions_counter.add(
+                1, {'pybankserv.counter_failed_transactions': str(False)})
         if req_type is BALANCE and increm:
-            pybankserv_counter.add(
-                1, {'pybankserv.pybankserv_counter', str(True)})
+            debt_balances_counter.add(
+                1, {'pybankserv.counter_debt_balances': str(True)})
