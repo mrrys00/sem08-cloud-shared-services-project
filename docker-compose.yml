@@ -1,0 +1,58 @@
+version: '3'
+
+services:
+  godemoserv:
+    build:
+      context: .
+      dockerfile: GoDemoService/cmd/service/Dockerfile
+    ports:
+      - "8083:8083"
+#      - "8080:8080"
+    environment:
+      - OUTBOUND_HOST_PORT=localhost:8080
+      - OUTBOUND_GET_ENDP=balance
+      - SERVICE_PORT=8083
+      - SERVICE_NAME=godemoservice
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4317
+      - OTEL_EXPORTER_OTLP_INSECURE=true
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    environment:
+      - COLLECTOR_OTLP_ENABLED=true
+    ports:
+      - "16686:16686"
+      - "4318:4318"
+
+  pybankserv:
+    build:
+      context: .
+      dockerfile: PyBankService/service/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVICE_NAME=pybankserv
+      - SERVICE_PORT=8080
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_SERVICE_NAME=pybankserv
+      - OTEL_PYTHON_LOGGING_AUTO_INSTRUMENTATION_ENABLED=true
+    depends_on:
+      - otel-collector
+
+  locust:
+    image: locustio/locust
+    command: -P 8089 -f /locust-tasks/locustfile.py --host http://pybankserv:8080
+    ports:
+      - "8089:8089"
+    volumes:
+      - ./PyBankService/:/locust-tasks
+    depends_on:
+      - pybankserv
+
+  otel-collector:
+    image: otel/opentelemetry-collector:latest
+    ports:
+      - "4317:4317"
+    volumes:
+      - ./PyBankService/config/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    command: [ "--config=/etc/otel-collector-config.yaml" ]

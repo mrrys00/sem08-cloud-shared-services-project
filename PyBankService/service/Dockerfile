@@ -1,8 +1,8 @@
 FROM python:3.12-slim
 
-WORKDIR /app
+WORKDIR /app/PyBankService
 
-COPY ./service/ .
+COPY PyBankService/service/ .
 
 RUN pip install -r requirements.txt
 RUN opentelemetry-bootstrap -a install

@@ -5,14 +5,14 @@ FROM golang as builder
 ARG app
 WORKDIR /app
 
-COPY go.mod .
-COPY go.sum .
+COPY GoDemoService/go.mod .
+COPY GoDemoService/go.sum .
 
 RUN go mod download
 
-COPY cmd/ cmd
-COPY lib/ lib
-COPY pkg/ pkg
+COPY GoDemoService/cmd/ cmd
+COPY GoDemoService/lib/ lib
+COPY GoDemoService/pkg/ pkg
 
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /out/${app} ./${app}
 
