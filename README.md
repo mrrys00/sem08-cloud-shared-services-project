@@ -53,26 +53,70 @@ System will be configured to communicate with the observability backends like Ja
 
 A system made for the purpose of this case study consists of:
 
-* 2 services continuously sending and fetching data from each other to simulate a traffic within a system:
-    - Go service (`GoDemoService`)
-  
-      Endpoints:
-    1. _/hello_
-        * request:
-            * params:
-                * name (optional): string (eg. Ala)
-        * response:
-            * json:
-                * message (required): string (eg. Hello, Ala!) 
-    2. _/alert_
-        * request:
-            * params:
-                * message (optional): string (eg. Ala)
-        * response:
-            * json:
-                * message (required): string (eg. Ala)
-    - Python service (`PyBank`)
-* Services will be instantiated and configured as Docker containers within a Docker Compose setup to be able to communicate with each other
+* 2 services, which provide simple APIs handling incoming HTTP requests:
+    * Go service (`GoDemoService`)
+        DEFAULT_URL= [http://localhost:8083](http://localhost:8083)  
+
+        Endpoints:
+        1. `/hello`
+            - request:
+                - params:
+                    - name (optional): string (eg. Ala)
+            - response:
+                - json:
+                    - message (required): string (eg. Hello, Ala!)
+                    - if message not specified: string (Hello, World!)
+
+                    ```json
+                    { "message" : "Hello, Ala!" }
+                    ```
+
+        2. `/alert`
+            - request:
+                - params:
+                    - message (optional): string (eg. Ala)
+            - response:
+                - json:
+                    - message (required): string (eg. Ala)
+                    - if message not specified: string ("Not specified message")
+
+                    ```json
+                    { "message" : "Ala" }
+                    ```
+
+    * Python service (`PyBank`)
+        DEFAULT_URL= [http://localhost:8080](http://localhost:8080)
+        Endpoints:
+
+        1. `/transaction`
+            * request:
+                * params: optional and ignored
+            * response:
+                * json:
+                    * execution (required): boolean (eg. true)
+                    ```json
+                    { "execution" : true }
+                    ```
+            * curl:
+                ```ps1
+                curl --location 'http://pybankserv:8080/transaction'
+                ```
+        2. `/balance`
+            * request:
+                * params: optional and ignored
+            * response:
+                * json:
+                    * balance (required): float (eg. 123.45)
+                    ```json
+                    { "balance" : 123.45 } 
+                    ```
+            * curl:
+                ```ps1
+                curl --location 'http://pybankserv:8080/balance'
+                ```
+* Services will be instantiated and configured as Docker containers within a Docker Compose setup to be able to communicate with the system.
+* Both services will be flooded with HTTP requests created by two Locust clients, which simulates network traffic within the application.
+[Locust configuration](https://docs.locust.io/en/stable/configuration.html)
 * Docker Compose will also be responsible for connecting generated metrics with observability backends, to display them in the user-friendly form.
 
 ## 5. Demo
@@ -137,64 +181,8 @@ docker rmi $(docker images 'sem08-cloud-shared-services-project' -a -q)
 4. Press `Start`. Locust will now mock service and agregate statistics
 5. Verify that the opentelemetry logging is visible in the console
 
-## 6. Documentation
-
-### Go Service
-
-DEFAULT_URL= `localhost:8083`
-
-**ENDPOINTS:**
-
-1. _/hello_
-    * request:
-        * params:
-            * name (optional): string (eg. Ala)
-    * response:
-        * json:
-            * message (required): string (eg. Hello, Ala!)
-            * if message not specified: string (Hello, World!)
-2. _/alert_
-    * request:
-        * params:
-            * message (optional): string (eg. Ala)
-    * response:
-        * json:
-            * message (required): string (eg. Ala)
-            * if message not specified: string ("Not specified message")
-
-### Python Service
-
-* DEFAULT_URL= [http://localhost:8080](http://localhost:8080)
-
-* [Locust configuration](https://docs.locust.io/en/stable/configuration.html)
-
-### Endpoints
-
-1. `/transaction`
-    * request:
-        * params: optional and ignored
-    * response:
-        ```json
-        { "execution" : true }
-        ```
-    * curl:
-        ```ps1
-        curl --location 'http://pybankserv:8080/transaction'
-        ```
-2. `/balance`
-    * request:
-        * params: optional and ignored
-    * response:
-        ```json
-        { "balance" : 123.45 } 
-        ```
-    * curl:
-        ```ps1
-        curl --location 'http://pybankserv:8080/balance'
-        ```
-
     
-## 7. TODO list
+## 6. TODO list
 
 1. Add Grafana integration
 * Grafana configuration for docker containers: https://grafana.com/blog/2023/06/07/easily-monitor-docker-desktop-containers-with-grafana-cloud/
