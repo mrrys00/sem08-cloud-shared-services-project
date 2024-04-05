@@ -50,7 +50,6 @@ docker rmi $(docker images 'godemoservice-godemoserv' -a -q)
 
 ## Documentation
 
-
 DEFAULT_URL= `localhost:8083`
 
 **ENDPOINTS:**
