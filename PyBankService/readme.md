@@ -37,7 +37,7 @@ docker rmi $(docker images 'godemoservice-godemoserv' -a -q)
 
 ## Documentation
 
-* DEFAULT_URL= [http://localhost:8080](http://localhost:8080)
+* DEFAULT_URL= [http://pybankserv:8080](http://pybankserv:8080)
 
 * [Locust configuration](https://docs.locust.io/en/stable/configuration.html)
 
