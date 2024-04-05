@@ -56,3 +56,23 @@ services:
     volumes:
       - ./PyBankService/config/otel-collector-config.yaml:/etc/otel-collector-config.yaml
     command: [ "--config=/etc/otel-collector-config.yaml" ]
+
+  swagger-ui-godemoservice:
+    image: swaggerapi/swagger-ui
+    container_name: "swagger-ui-container-godemoservice"
+    ports:
+      - "8084:8080"
+    volumes:
+      - ./GoDemoService/documentation/swagger.yaml:/swagger.yml
+    environment:
+      SWAGGER_JSON: /swagger.yml
+
+  swagger-ui-pybankservice:
+    image: swaggerapi/swagger-ui
+    container_name: "swagger-ui-container-pybankservice"
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./PyBankService/documentation/swagger.yaml:/swagger.yml
+    environment:
+      SWAGGER_JSON: /swagger.yml
