@@ -50,7 +50,8 @@ docker rmi $(docker images 'godemoservice-godemoserv' -a -q)
 
 ## Documentation
 
-<iframe src="documentation/swagger-docs.html" title="Swagger UI" width="100%" height="600px"></iframe>
+
+<iframe src="./documentation/swagger-ui.html" title="Swagger UI" width="100%" height="600px"></iframe>
 
 DEFAULT_URL= `localhost:8083`
 
