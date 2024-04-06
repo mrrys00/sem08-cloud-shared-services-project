@@ -1,0 +1,60 @@
+openapi: 3.0.0
+info:
+  title: Go Demo Service
+  description: This is demo documentation for Go Demo Service
+  contact: 
+    name: Szymon Ryś
+    email: rys@student.agh.edu.pl
+    url: http://www.i.have/no/page/enjoy/not/found/error
+  version: 1.0.1
+servers:
+  - url: "http://localhost:8083"
+paths:
+  /hello:
+    get:
+      summary: Get a personalized greeting
+      parameters:
+        - name: name
+          in: query
+          description: Optional name parameter
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+          # examples:
+          #   default:
+          #     value: { "message": "Hello, World!" }
+          #   custom:
+          #     value: { "message": "Hello, Ala!" }
+  /alert:
+    get:
+      summary: Get an alert message
+      parameters:
+        - name: message
+          in: query
+          description: Optional message parameter
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+          # examples:
+          #   default:
+          #     value: { "message": "Not specified message" }
+          #   custom:
+          #     value: { "message": "Ala" }

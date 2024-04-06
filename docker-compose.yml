@@ -1,6 +1,9 @@
 version: '3'
 
 services:
+
+  # Go Service deps
+
   godemoserv:
     build:
       context: .
@@ -24,6 +27,28 @@ services:
       - "16686:16686"
       - "4318:4318"
 
+  locust-godemoserv:
+    image: locustio/locust
+    command: -P 8099 -f /locust-tasks/locustfile.py --host http://godemoserv:8083
+    ports:
+      - "8099:8099"
+    volumes:
+      - ./GoDemoService/:/locust-tasks
+    depends_on:
+      - godemoserv
+
+  swagger-ui-godemoservice:
+    image: swaggerapi/swagger-ui
+    container_name: "swagger-ui-container-godemoservice"
+    ports:
+      - "8084:8080"
+    volumes:
+      - ./GoDemoService/documentation/swagger.yaml:/swagger.yml
+    environment:
+      SWAGGER_JSON: /swagger.yml
+
+  # Python Service deps
+
   pybankserv:
     build:
       context: .
@@ -39,7 +64,7 @@ services:
     depends_on:
       - otel-collector
 
-  locust:
+  locust-pybankserv:
     image: locustio/locust
     command: -P 8089 -f /locust-tasks/locustfile.py --host http://pybankserv:8080
     ports:
@@ -56,3 +81,13 @@ services:
     volumes:
       - ./PyBankService/config/otel-collector-config.yaml:/etc/otel-collector-config.yaml
     command: [ "--config=/etc/otel-collector-config.yaml" ]
+
+  swagger-ui-pybankservice:
+    image: swaggerapi/swagger-ui
+    container_name: "swagger-ui-container-pybankservice"
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./PyBankService/documentation/swagger.yaml:/swagger.yml
+    environment:
+      SWAGGER_JSON: /swagger.yml

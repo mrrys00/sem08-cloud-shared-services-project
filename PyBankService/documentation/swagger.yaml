@@ -1,0 +1,58 @@
+openapi: 3.0.0
+info:
+  title: Py Bank Service
+  description: This is demo documentation for Py Bank Service
+  contact: 
+    name: Mateusz Cyganek
+    email: mateuszcga@student.agh.edu.pl
+    url: http://www.i.have/no/page/enjoy/not/found/error
+  version: 1.0.0
+servers:
+  - url: "http://localhost:8080"
+paths:
+  /transaction:
+    get:
+      summary: Perform a transaction
+      description: |
+        This endpoint allows you to perform a transaction.
+        The request parameters are optional and ignored.
+      responses:
+        '200':
+          description: Successful transaction
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  execution:
+                    type: boolean
+          # examples:
+          #   default:
+          #     value: { "execution": true }
+      x-codeSamples:
+        - lang: curl
+          source: |
+            curl --location 'http://localhost:8080/transaction'
+  /balance:
+    get:
+      summary: Get account balance
+      description: |
+        This endpoint allows you to get the account balance.
+        The request parameters are optional and ignored.
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  balance:
+                    type: number
+          # examples:
+          #   default:
+          #     value: { "balance": 123.45 }
+      x-codeSamples:
+        - lang: curl
+          source: |
+            curl --location 'http://localhost:8080/balance'
