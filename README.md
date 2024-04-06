@@ -45,11 +45,18 @@ A log is a timestamped text record, either structured (recommended) or unstructu
 
 ## 3. Case study concept description
 
-The performed case study will focus on the demonstration of network traffic and performance measurement and tracking provided by OpenTelemetry framework and its observability backends, like Jaeger. In this simple example, we will use OpenTelemetry to observe the internal state of the system consisting of a couple of services that will generate traffic within a system by sending some HTTP requests and sharing dummy resources to fetch.
 
-System will be configured to communicate with the observability backends like Jaeger, Prometheus and Grafana. User will be able to access those tools to analyze and monitor data flow within the application and for example find potential problems within the system's performance. 
+
+The performed case study will focus on the demonstration of network traffic and performance measurement and tracking provided by OpenTelemetry framework and its observability backends, like Jaeger. In this simple example, we will use OpenTelemetry to observe the internal state of the system consisting of two services that share dummy resources to fetch and that will be used to simulate traffic within a system by sending some automated HTTP requests to them by Locust clients.
+
+System will be configured to communicate with the observability backends like Jaeger, and Grafana. User will be able to access those tools to analyze and monitor data flow within the application and for example find potential problems within the system's performance.
+
+
 
 ## 4. Solution architecture 
+
+<img src="images/SUU_architecture.png" alt="image" width="auto" height="auto">
+
 
 A system made for the purpose of this case study consists of:
 
@@ -117,7 +124,7 @@ A system made for the purpose of this case study consists of:
 * Services will be instantiated and configured as Docker containers within a Docker Compose setup to be able to communicate with the system.
 * Both services will be flooded with HTTP requests created by two Locust clients, which simulates network traffic within the application.
 [Locust configuration](https://docs.locust.io/en/stable/configuration.html)
-* Docker Compose will also be responsible for connecting generated metrics with observability backends, to display them in the user-friendly form.
+* Docker Compose will also be responsible for connecting generated metrics with observability backends, to display them in the user-friendly form. Those backends are Jaeger (only for Go service), and Grafana (used by both).
 
 ## 5. Demo
 
