@@ -1,7 +1,15 @@
 from datetime import datetime
 from logging import basicConfig, getLogger, INFO
 from flask import Flask
+from os import getenv
 from opentelemetry import trace, metrics
+from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
+from opentelemetry.sdk.resources import SERVICE_NAME, Resource
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from opentelemetry.sdk.metrics import MeterProvider
+from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
 from Helper import print_colored, simulate_delay, random_bool, random_double
 
 CYAN, RED, MAGENTA = '\033[96m', '\033[91m', '\033[95m'
@@ -14,6 +22,11 @@ app = Flask(__name__)
 basicConfig(level=INFO)
 logger = getLogger(__name__)
 
+resource = Resource(attributes={
+    SERVICE_NAME: 'pybankserv'
+})
+
+trace.set_tracer_provider(TracerProvider(resource=resource))
 tracer = trace.get_tracer('pybankserv.tracer')
 
 meter_failed_transactions = metrics.get_meter(
@@ -30,6 +43,14 @@ debt_balances_counter = meter_debt_balances.create_counter(
     description='Number or balance requests from accounts with debt',
 )
 
+span_processor = BatchSpanProcessor(
+    OTLPSpanExporter(endpoint=getenv('OTEL_EXPORTER_OTLP_ENDPOINT'), insecure=True))
+trace.get_tracer_provider().add_span_processor(span_processor)
+
+reader = PeriodicExportingMetricReader(
+    OTLPMetricExporter(endpoint=getenv('OTEL_EXPORTER_OTLP_ENDPOINT')))
+meterProvider = MeterProvider(resource=resource, metric_readers=[reader])
+metrics.set_meter_provider(meterProvider)
 
 
 @app.route(TRANSACTION)
