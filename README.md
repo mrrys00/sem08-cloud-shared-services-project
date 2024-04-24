@@ -132,10 +132,82 @@ docker-compose down
     * 1. Infrastructure as Code approach
 
 ## 8. Demo deployment steps:
-    * 1. Configuration set-up
-    * 2. Data preparation
-    * 3. Execution procedure
-    * 4. Results presentation
+
+## Configuration set-up
+
+### 1. Configuration set-up
+
+Just start the application by running the following command in the project directory:
+
+```bash
+docker-compose up
+```
+
+If you haven't installed the repository yet, go to point 6 (Installation Method) in this readme.
+
+### 2. Services preparation
+
+#### Go Service
+* Go to Locust Web UI  at [localhost:8099](http://localhost:8099/) 
+* set Number of users (peak concurrency)
+* set Ramp up (users started/second)
+* press start button
+
+![img_1.png](img_1.png)
+
+#### Python Service
+
+* Go to Locust Web UI  at [localhost:8089](http://localhost:8089/)
+* set Number of users (peak concurrency)
+* set Ramp up (users started/second)
+* press start button
+
+![img.png](img.png)
+
+### 3. Observe telemetry
+
+#### Jagger
+* Go to Jagger UI http://localhost:16686/jaeger/ui/search
+
+![img_2.png](img_2.png)
+
+#### Grafana
+* Go to Grafana UI http://localhost:3000/
+
+![img_3.png](img_3.png)
+
+* On the login page enter credentials:
+  * login: admin
+  * password: admin
+
+* On the left side of the page choose Dashboard from menu:
+
+![img_4.png](img_4.png)
+
+* On the top right side click "New" and then "New dashboard"
+
+![img_5.png](img_5.png)
+
+* Then click "Add visualization"
+
+![img_6.png](img_6.png)
+
+* Click on Jagger
+
+![img_7.png](img_7.png)
+
+* Select Query type as Search
+* Select Service Name as "godemoservice"
+* And click Apply in top right corner
+
+![img_8.png](img_8.png)
+
+* Now you can observe and add more dashboards to the grafana UI
+
+![img_9.png](img_9.png)
+
+
+
 
 ## 9. Summary – conclusions
 
