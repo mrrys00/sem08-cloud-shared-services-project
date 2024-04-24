@@ -52,8 +52,7 @@ The performed case study will focus on the demonstration of network traffic and 
 System will be configured to communicate with the observability backends like Jaeger, and Grafana. User will be able to access those tools to analyze and monitor data flow within the application and for example find potential problems within the system's performance.
 
 
-
-## 4. Solution architecture 
+## 4. Solution architecture
 
 <center><img src="images/SUU_architecture.svg" alt="image" width="auto" height="auto"></center>
 
@@ -63,69 +62,103 @@ The system made for the purpose of this case study consists of:
 
 * 2 services, which provide simple APIs handling incoming HTTP requests:
     * Go service (`GoDemoService`)
-        DEFAULT_URL= [http://localhost:8083](http://localhost:8083)  
-
-        Endpoints:
-        1. `/hello`
-            - request:
-                - params:
-                    - name (optional): string (eg. Ala)
-            - response:
-                - json:
-                    - message (required): string (eg. Hello, Ala!)
-                    - if message not specified: string (Hello, World!)
-
-                    ```json
-                    { "message" : "Hello, Ala!" }
-                    ```
-
-        2. `/alert`
-            - request:
-                - params:
-                    - message (optional): string (eg. Ala)
-            - response:
-                - json:
-                    - message (required): string (eg. Ala)
-                    - if message not specified: string ("Not specified message")
-
-                    ```json
-                    { "message" : "Ala" }
-                    ```
+      [DOCUMENTATION](http://localhost:8084/),  URL = [http://localhost:8083](http://localhost:8083)
 
     * Python service (`PyBank`)
-        DEFAULT_URL= [http://localhost:8080](http://localhost:8080)
-        Endpoints:
+      [DOCUMENTATION](http://localhost:8081/),  URL = [http://localhost:8080](http://localhost:8080)
 
-        1. `/transaction`
-            * request:
-                * params: optional and ignored
-            * response:
-                * json:
-                    * execution (required): boolean (eg. true)
-                    ```json
-                    { "execution" : true }
-                    ```
-            * curl:
-                ```ps1
-                curl --location 'http://pybankserv:8080/transaction'
-                ```
-        2. `/balance`
-            * request:
-                * params: optional and ignored
-            * response:
-                * json:
-                    * balance (required): float (eg. 123.45)
-                    ```json
-                    { "balance" : 123.45 } 
-                    ```
-            * curl:
-                ```ps1
-                curl --location 'http://pybankserv:8080/balance'
-                ```
-* Services will be instantiated and configured as Docker containers within a Docker Compose setup to be able to communicate with the system.
-* Both services will be flooded with HTTP requests created by two Locust clients, which simulates network traffic within the application.
-[Locust configuration](https://docs.locust.io/en/stable/configuration.html)
-* Docker Compose will also be responsible for connecting generated metrics with observability backends, to display them in the user-friendly form. Those backends are Jaeger  and Grafana.
+
+
+* Services are instantiated and configured as Docker containers within a Docker Compose setup to be able to communicate with the system.
+* Both services are flooded with HTTP requests created by two Locust clients, which simulates network traffic within the application.
+  [Locust configuration](https://docs.locust.io/en/stable/configuration.html)
+* Docker Compose are also responsible for connecting generated metrics with observability backends, to display them in the user-friendly form. Those backends are Jaeger  and Grafana.
+
+## 5. Environment configuration description
+
+The project was created using Docker. This approach allows for minimizing the requirements needed to run the project. 
+The entire application can be launched with a single Docker command 'docker-compose up', which installs all the 
+necessary dependencies and creates separate images for each component.
+
+### Benefits:
+ * Using Docker provides environmental isolation and facilitates dependency management.
+ * Scaling the project is easy by running additional service containers.
+ * The project is easy to deploy on different platforms due to its portability.
+
+### Docker deployment requirements:
+
+* Docker
+* Docker Compose v2.0.0+
+* 2 GB of RAM for the application
+
+## 6. Installation method
+
+### Prerequisites:
+
+* Docker: Ensure Docker is installed and running on your system. You can download Docker from the official website: https://docs.docker.com/get-docker/
+* Docker Compose: Install Docker Compose, a tool for managing multi-container Docker applications. Download instructions are available at: https://docs.docker.com/compose/install/
+* System Resources: Ensure your system has at least 2 GB of RAM available to run the application.
+
+### Installation Steps:
+
+#### 1. Clone the Project Repository:
+```bash
+git clone https://github.com/mrrys00/sem08-cloud-shared-services-project.git
+```
+
+#### 2. Navigate to the Project Directory:
+```bash
+cd sem08-cloud-shared-services-project
+```
+
+#### 3. Start the Application:
+```bash
+docker-compose up
+```
+
+#### Verification
+To verify that the application is running correctly, you can check the logs:
+```bash
+docker-compose logs
+```
+
+#### Stop Application
+To stop the application and remove the containers, run:
+```bash
+docker-compose down
+```
+
+## 7. How to reproduce - step by step
+    * 1. Infrastructure as Code approach
+
+## 8. Demo deployment steps:
+    * 1. Configuration set-up
+    * 2. Data preparation
+    * 3. Execution procedure
+    * 4. Results presentation
+
+## 9. Summary – conclusions
+
+In this project, we conducted a study to explore OpenTelemetry technology and its applications in monitoring and 
+managing service environments. Key findings include:
+
+* OpenTelemetry is a powerful tool for collecting and analyzing telemetry data, enabling performance monitoring, request
+tracing, and metric collection.
+* Its flexibility allows integration with various observability backends, and its architecture, based on Docker 
+containers and Docker Compose, facilitates easy and scalable deployment.
+* Tools like Jaeger and Grafana provide transparent monitoring and control over application operations.
+* OpenTelemetry's adaptability makes it suitable for evolving application architectures and monitoring needs.
+
+These insights lay the groundwork for further exploration and development in service environment observation and 
+management using OpenTelemetry tools.
+
+## 10. References
+
+1. OpenTelemetry official site: https://opentelemetry.io/docs/demo/docker-deployment/
+2. Grafana configuration: https://grafana.com/blog/2023/06/07/easily-monitor-docker-desktop-containers-with-grafana-cloud/
+3. Jagger configuration: https://www.jaegertracing.io/docs/1.56/deployment/
+4. Locust configuration: https://docs.locust.io/en/stable/configuration.html
+5. Swagger: https://swagger.io/docs/open-source-tools/swagger-ui/usage/configuration/
 
 ## 5. Demo
 
@@ -188,9 +221,3 @@ docker rmi $(docker images 'sem08-cloud-shared-services-project' -a -q)
     * Mocking target (Py Service at [http://pybankserv:8080](http://pybankserv:8080))
 4. Press `Start`. Locust will now mock service and agregate statistics
 5. Verify that the opentelemetry logging is visible in the console
-
-    
-## 6. TODO list
-
-1. Add Grafana integration
-* Grafana configuration for docker containers: https://grafana.com/blog/2023/06/07/easily-monitor-docker-desktop-containers-with-grafana-cloud/
