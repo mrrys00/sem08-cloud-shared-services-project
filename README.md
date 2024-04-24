@@ -163,10 +163,16 @@ If you haven't installed the repository yet, go to point 6 (Installation Method)
 
 ### 3. Observe telemetry
 
-#### Jagger
-* Go to Jagger UI http://localhost:16686/jaeger/ui/search
+#### Jeager
+* Go to Jeager UI http://localhost:16686/jaeger/ui/search
 
 ![img_2.png](img_2.png)
+
+* On the left side of the page Select Service "godemoservice" or "pybankserve" as Service
+* Select operations: all
+* Now you can observe various kinds of dashboards i Jeager UI
+
+![img_11.png](img_11.png)
 
 #### Grafana
 * Go to Grafana UI http://localhost:3000/
@@ -189,12 +195,12 @@ If you haven't installed the repository yet, go to point 6 (Installation Method)
 
 ![img_6.png](img_6.png)
 
-* Click on Jagger
+* Select datasource: click on Jeager
 
-![img_7.png](img_7.png)
+![img_10.png](img_10.png)
 
 * Select Query type as Search
-* Select Service Name as "godemoservice"
+* Select Service Name as "godemoservice" or "pybankserve"
 * And click Apply in top right corner
 
 ![img_8.png](img_8.png)
