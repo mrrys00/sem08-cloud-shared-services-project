@@ -209,6 +209,10 @@ If you haven't installed the repository yet, go to point 6 (Installation Method)
 
 ![img_9.png](img_9.png)
 
+* Dashboard displaying duration of requests in different charts 
+
+![img_12.png](img_12.png)
+
 
 ## 8. Summary – conclusions
 
