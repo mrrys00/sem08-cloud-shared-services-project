@@ -128,10 +128,7 @@ To stop the application and remove the containers, run:
 docker-compose down
 ```
 
-## 7. How to reproduce - step by step
-    * 1. Infrastructure as Code approach
-
-## 8. Demo deployment steps:
+## 7. Demo deployment steps:
 
 ## Configuration set-up
 
@@ -207,9 +204,7 @@ If you haven't installed the repository yet, go to point 6 (Installation Method)
 ![img_9.png](img_9.png)
 
 
-
-
-## 9. Summary – conclusions
+## 8. Summary – conclusions
 
 In this project, we conducted a study to explore OpenTelemetry technology and its applications in monitoring and 
 managing service environments. Key findings include:
@@ -224,72 +219,10 @@ containers and Docker Compose, facilitates easy and scalable deployment.
 These insights lay the groundwork for further exploration and development in service environment observation and 
 management using OpenTelemetry tools.
 
-## 10. References
+## 9. References
 
 1. OpenTelemetry official site: https://opentelemetry.io/docs/demo/docker-deployment/
 2. Grafana configuration: https://grafana.com/blog/2023/06/07/easily-monitor-docker-desktop-containers-with-grafana-cloud/
 3. Jagger configuration: https://www.jaegertracing.io/docs/1.56/deployment/
 4. Locust configuration: https://docs.locust.io/en/stable/configuration.html
 5. Swagger: https://swagger.io/docs/open-source-tools/swagger-ui/usage/configuration/
-
-## 5. Demo
-
-### How to run?
-
-
-```shell
-docker compose up
-```
-
-or more brutal solution:
-
-```shell
-docker compose up --force-recreate --remove-orphans --detach
-```
-
-stop:
-
-```shell
-docker compose down
-```
-
-get rid of odl image:
-```shell
-docker rmi $(docker images 'sem08-cloud-shared-services-project' -a -q)
-```
-
-### How to test Go service?
-
-1. After running the docker compose
-2. Go to http://localhost:16686/. There will be no traces for _godemoservice,_ so it won't be available in the dropdown.
-3. Select _godemoservice_ with the Service dropdown.
-4. Send cURLs (e.g. using Postman or terminal):
-    ```
-   curl --location 'http://localhost:8083/alert?message=Ala'
-   ```
-    ```
-   curl --location 'http://localhost:8083/hello?name=Ala'
-   ```
-5. Should see the response:
-    ```
-    {
-    "message": "Ala"
-    }
-   ```
-   ```
-    {
-    "message": "Hello, Ala!"
-    }
-   ```
-6. Should see the logs in the Jaeger UI
-
-### How to test Python service?
-
-1. After running the docker compose
-2. Go to Locust Web UI at [localhost:8089](http://localhost:8089/).
-3. Input
-    * Number of users - peak number of concurrent Locust users.
-    * Ram up - rate to spawn users at (users per second).
-    * Mocking target (Py Service at [http://pybankserv:8080](http://pybankserv:8080))
-4. Press `Start`. Locust will now mock service and agregate statistics
-5. Verify that the opentelemetry logging is visible in the console
