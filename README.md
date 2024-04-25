@@ -150,7 +150,7 @@ If you haven't installed the repository yet, go to point 6 (Installation Method)
 * set Ramp up (users started/second)
 * press start button
 
-![img_1.png](img_1.png)
+![img_1.png](images/img_1.png)
 
 #### Python Service
 
@@ -159,25 +159,25 @@ If you haven't installed the repository yet, go to point 6 (Installation Method)
 * set Ramp up (users started/second)
 * press start button
 
-![img.png](img.png)
+![img.png](images/img.png)
 
 ### 3. Observe telemetry
 
 #### Jeager
 * Go to Jeager UI http://localhost:16686/jaeger/ui/search
 
-![img_2.png](img_2.png)
+![img_2.png](images/img_2.png)
 
 * On the left side of the page Select Service "godemoservice" or "pybankserve" as Service
 * Select operations: all
 * Now you can observe various kinds of dashboards i Jeager UI
 
-![img_11.png](img_11.png)
+![img_11.png](images/img_11.png)
 
 #### Grafana
 * Go to Grafana UI http://localhost:3000/
 
-![img_3.png](img_3.png)
+![img_3.png](images/img_3.png)
 
 * On the login page enter credentials:
   * login: admin
@@ -185,33 +185,33 @@ If you haven't installed the repository yet, go to point 6 (Installation Method)
 
 * On the left side of the page choose Dashboard from menu:
 
-![img_4.png](img_4.png)
+![img_4.png](images/img_4.png)
 
 * On the top right side click "New" and then "New dashboard"
 
-![img_5.png](img_5.png)
+![img_5.png](images/img_5.png)
 
 * Then click "Add visualization"
 
-![img_6.png](img_6.png)
+![img_6.png](images/img_6.png)
 
 * Select datasource: click on Jeager
 
-![img_10.png](img_10.png)
+![img_10.png](images/img_10.png)
 
 * Select Query type as Search
 * Select Service Name as "godemoservice" or "pybankserve"
 * And click Apply in top right corner
 
-![img_8.png](img_8.png)
+![img_8.png](images/img_8.png)
 
 * Now you can observe and add more dashboards to the grafana UI
 
-![img_9.png](img_9.png)
+![img_9.png](images/img_9.png)
 
 * Dashboard displaying duration of requests in different charts 
 
-![img_12.png](img_12.png)
+![img_12.png](images/img_12.png)
 
 
 ## 8. Summary – conclusions
